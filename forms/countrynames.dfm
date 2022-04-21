@@ -37,14 +37,14 @@ object FrmLocalizacaoAreasGeograficas: TFrmLocalizacaoAreasGeograficas
     Width = 23
     Height = 22
   end
-  object SpeedButton1: TSpeedButton
+  object BtUp: TSpeedButton
     Left = 586
     Top = 248
     Width = 23
     Height = 22
     Anchors = [akRight, akBottom]
   end
-  object SpeedButton2: TSpeedButton
+  object BtDown: TSpeedButton
     Left = 610
     Top = 248
     Width = 23
@@ -86,21 +86,21 @@ object FrmLocalizacaoAreasGeograficas: TFrmLocalizacaoAreasGeograficas
     Columns = <
       item
         Expanded = False
-        FieldName = 'NUMERIC3'
+        FieldName = 'M49'
         Title.Caption = 'numeric-3'
         Width = 80
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 'ALPHA3'
+        FieldName = 'A3'
         Title.Caption = 'alpha-3'
         Width = 80
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 'ALPHA2'
+        FieldName = 'A2'
         Title.Caption = 'alpha-2'
         Width = 80
         Visible = True
@@ -119,7 +119,6 @@ object FrmLocalizacaoAreasGeograficas: TFrmLocalizacaoAreasGeograficas
     Width = 626
     Height = 80
     Anchors = [akLeft, akTop, akRight, akBottom]
-    DataSource = DataSourceLocalizacoes
     Options = [dgTitles, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
     TabOrder = 1
     TitleFont.Charset = DEFAULT_CHARSET
@@ -129,9 +128,9 @@ object FrmLocalizacaoAreasGeograficas: TFrmLocalizacaoAreasGeograficas
     TitleFont.Style = []
   end
   object EdtPesquisar: TEdit
-    Left = 107
+    Left = 80
     Top = 10
-    Width = 261
+    Width = 288
     Height = 21
     TabOrder = 2
   end
@@ -186,101 +185,37 @@ object FrmLocalizacaoAreasGeograficas: TFrmLocalizacaoAreasGeograficas
     TabOrder = 6
     OnChange = EdtDescrChange
   end
-  object ZConnection1: TZConnection
-    ControlsCodePage = cGET_ACP
-    AutoEncodeStrings = True
-    Properties.Strings = (
-      'AutoEncodeStrings=True'
-      'controls_cp=GET_ACP')
-    HostName = 'localhost'
-    Port = 3050
-    Database = 'TESTE.FDB'
-    User = 'SYSDBA'
-    Password = 'masterkey'
-    Protocol = 'firebird-3.0'
-    LibraryLocation = 'fbclient.dll'
-    Left = 8
-    Top = 3
-  end
-  object QueryCodigos: TZReadOnlyQuery
-    Connection = ZConnection1
-    SQL.Strings = (
-      'SELECT '
-      '    NUM3K AS numeric3,'
-      '    ALPHA3K AS alpha3,'
-      '    ALPHA2K AS alpha2,'
-      '    '#39'pa'#237's/territ'#243'rio'#39' AS area'
-      'FROM'
-      '    LC001AR08')
-    Params = <>
+  object DataSourceCodigos: TDataSource
+    DataSet = ClientDatasetCodes
     Left = 40
     Top = 3
-    object QueryCodigosNUMERIC3: TStringField
-      FieldName = 'NUMERIC3'
-      ReadOnly = True
+  end
+  object ClientDatasetCodes: TClientDataSet
+    Active = True
+    Aggregates = <>
+    Params = <>
+    Left = 8
+    Top = 3
+    Data = {
+      790000009619E0BD0100000018000000040000000000030000007900034D3439
+      0100490000000100055749445448020002000300024133010049000000010005
+      5749445448020002000300024132010049000000010005574944544802000200
+      0200044152454101004900000001000557494454480200020010000000}
+    object ClientDatasetCodesM49: TStringField
+      FieldName = 'M49'
       Size = 3
     end
-    object QueryCodigosALPHA3: TStringField
-      FieldName = 'ALPHA3'
-      ReadOnly = True
+    object ClientDatasetCodesA3: TStringField
+      FieldName = 'A3'
       Size = 3
     end
-    object QueryCodigosALPHA2: TStringField
-      FieldName = 'ALPHA2'
-      ReadOnly = True
+    object ClientDatasetCodesA2: TStringField
+      FieldName = 'A2'
       Size = 2
     end
-    object QueryCodigosAREA: TStringField
+    object ClientDatasetCodesAREA: TStringField
       FieldName = 'AREA'
-      ReadOnly = True
-      Size = 15
+      Size = 16
     end
-  end
-  object DataSourceCodigos: TDataSource
-    DataSet = QueryCodigos
-    Left = 72
-    Top = 3
-  end
-  object ZConnection2: TZConnection
-    ControlsCodePage = cGET_ACP
-    AutoEncodeStrings = True
-    Properties.Strings = (
-      'AutoEncodeStrings=True'
-      'controls_cp=GET_ACP')
-    HostName = 'localhost'
-    Port = 3306
-    Database = 'teste'
-    User = 'root'
-    Password = 'lhc007880'
-    Protocol = 'MariaDB-10'
-    LibraryLocation = 
-      'C:\Users\Administrador.WIN-6NJAJAVM677\Downloads\libmariadb\libm' +
-      'ariadb.dll'
-    Left = 8
-    Top = 128
-  end
-  object ZReadOnlyQuery2: TZReadOnlyQuery
-    Connection = ZConnection2
-    SQL.Strings = (
-      'SELECT'
-      #9'LPAD(M49, 3, '#39'0'#39') AS M49,'
-      #9'`ISO3166-1-NUMERIC` AS ISO_N3,'
-      #9'`ISO3166-1-Alpha-3` AS IS0_A3,'
-      #9'`ISO3166-1-Alpha-2` AS ISO_A2,'
-      #9'`Sub-region Code` AS SUBREGION_CODE,'
-      #9'`Sub-region Name` AS SUBREGION_NAME,'
-      #9'`Region Code` AS REGION_CODE,'
-      #9'`Region Name` AS REGION_NAME,'
-      #9'`Geoname ID` AS GEONAMEID'
-      'FROM'
-      #9'country_codes_csv')
-    Params = <>
-    Left = 40
-    Top = 128
-  end
-  object DataSourceLocalizacoes: TDataSource
-    DataSet = ZReadOnlyQuery2
-    Left = 72
-    Top = 128
   end
 end

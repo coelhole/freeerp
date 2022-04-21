@@ -5,22 +5,13 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, ZAbstractRODataset, ZDataset, ZAbstractConnection,
-  ZConnection, Grids, DBGrids, StdCtrls, ExtCtrls, Buttons;
+  ZConnection, Grids, DBGrids, StdCtrls, ExtCtrls, Buttons, DBClient;
 
 type
   TFrmLocalizacaoAreasGeograficas = class(TForm)
-    ZConnection1: TZConnection;
-    QueryCodigos: TZReadOnlyQuery;
     GridCodigos: TDBGrid;
     DataSourceCodigos: TDataSource;
-    ZConnection2: TZConnection;
-    ZReadOnlyQuery2: TZReadOnlyQuery;
-    DataSourceLocalizacoes: TDataSource;
     GridNomes: TDBGrid;
-    QueryCodigosNUMERIC3: TStringField;
-    QueryCodigosALPHA3: TStringField;
-    QueryCodigosALPHA2: TStringField;
-    QueryCodigosAREA: TStringField;
     EdtPesquisar: TEdit;
     EdtCodLng: TLabeledEdit;
     BtFechar: TBitBtn;
@@ -28,9 +19,14 @@ type
     EdtDescr: TLabeledEdit;
     BtAdicionar: TSpeedButton;
     BtRemover: TSpeedButton;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
+    BtUp: TSpeedButton;
+    BtDown: TSpeedButton;
     LblInfoAlterarOrdemLocalizacoes: TLabel;
+    ClientDatasetCodes: TClientDataSet;
+    ClientDatasetCodesM49: TStringField;
+    ClientDatasetCodesA3: TStringField;
+    ClientDatasetCodesA2: TStringField;
+    ClientDatasetCodesAREA: TStringField;
     procedure Button1Click(Sender: TObject);
     procedure BtFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -39,6 +35,7 @@ type
     procedure EdtDescrChange(Sender: TObject);
   private
     colocarFocusNoEditPesquisar:boolean;
+    procedure carregarCodigos;
   public
     { Public declarations }
   end;
@@ -49,6 +46,34 @@ var
 implementation
 
 {$R *.dfm}
+
+uses
+  dbal, threads;
+
+procedure TFrmLocalizacaoAreasGeograficas.carregarCodigos;
+var
+  qry:TZReadOnlyQuery;
+begin
+  qry:=newROQuery;
+  try
+    qry.SQL.Add('SELECT * FROM CCODES');
+    qry.Open;
+    while not qry.Eof do begin
+      ClientDatasetCodes.Append;
+      ClientDatasetCodes.FieldByName('M49').AsString:=qry.FieldByName('M49').AsString;
+      ClientDatasetCodes.FieldByName('A3').AsString:=qry.FieldByName('IS0_A3').AsString;
+      ClientDatasetCodes.FieldByName('A2').AsString:=qry.FieldByName('ISO_A2').AsString;
+      ClientDatasetCodes.FieldByName('AREA').AsString:='país/território';
+      ClientDatasetCodes.Post;
+      qry.Next;
+    end;
+    ClientDatasetCodes.First;
+    qry.Close;
+  finally
+    qry.Connection:=nil;
+    qry.Free;
+  end;
+end;
 
 procedure TFrmLocalizacaoAreasGeograficas.Button1Click(Sender: TObject);
 begin
@@ -69,7 +94,7 @@ end;
 procedure TFrmLocalizacaoAreasGeograficas.FormCreate(Sender: TObject);
 begin
   colocarFocusNoEditPesquisar:=true;
-  QueryCodigos.Open;
+  sync(carregarCodigos);
 end;
 
 procedure TFrmLocalizacaoAreasGeograficas.EdtNomeChange(Sender: TObject);

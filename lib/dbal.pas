@@ -13,7 +13,7 @@ uses
   FixedConnPool;
 
 const
-  DATABASE:ansistring='C:\Users\Administrador.WIN-6NJAJAVM677\Desktop\TESTE.FDB';
+  DATABASE:ansistring='C:\TESTE.FDB';
   FB_LIB:ansistring='C:\Users\Administrador.WIN-6NJAJAVM677\Documents\GitHub\CSG\server\db\fbclient.dll';
   PORT:integer=3050;
   POOL_SIZE:integer=8;
