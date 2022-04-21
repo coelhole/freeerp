@@ -14,7 +14,7 @@ uses
 
 const
   DATABASE:ansistring='C:\TESTE.FDB';
-  FB_LIB:ansistring='C:\Users\Administrador.WIN-6NJAJAVM677\Documents\GitHub\CSG\server\db\fbclient.dll';
+  FB_LIB:ansistring='C:\Windows\System32\fbclient.dll';
   PORT:integer=3050;
   POOL_SIZE:integer=8;
   CLEANUP_DELAY_MINUTES:integer=2;
